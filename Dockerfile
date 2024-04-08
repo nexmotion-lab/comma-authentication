@@ -15,13 +15,14 @@ RUN ./gradlew build --no-daemon
 FROM eclipse-temurin:17-jdk-alpine as jre-build
 COPY --from=build /app/build/libs/*.jar /app/app.jar
 RUN $JAVA_HOME/bin/jlink \
-    --add-modules java.base,java.logging,java.xml,java.sql,java.desktop,java.management,java.naming,java.security.sasl,java.instrument \
+    --add-modules java.base,java.logging,java.xml,java.sql,java.desktop,java.management,java.naming,java.security.sasl,java.instrument,java.security.jgss \
     --add-modules jdk.unsupported,jdk.crypto.ec \
     --strip-debug \
     --no-man-pages \
     --no-header-files \
     --compress=2 \
     --output /javaruntime
+
 
 
 FROM alpine:3.15
