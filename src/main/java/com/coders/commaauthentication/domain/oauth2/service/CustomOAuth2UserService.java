@@ -52,7 +52,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 createdUser.getRole(),
                 createdUser.getEmail(),
                 socialType,
-                createdUser.getId()
+                createdUser.isFirstLogin()
         );
     }
 
@@ -67,11 +67,13 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private Account getUser(OAuthAttributes attributes, SocialType socialType) {
-        Account findUser = accountRepository.findBySocialTypeAndSocialId(socialType,
-                attributes.getOAuth2UserInfo().getId()).orElse(null);
+        Account findUser = accountRepository.findByEmail(
+                attributes.getOAuth2UserInfo().getEmail()).orElse(null);
 
         if(findUser == null) {
-            return saveUser(attributes, socialType);
+            Account account = saveUser(attributes, socialType);
+            account.setFirstLogin(true);
+            return account;
         }
         return findUser;
     }

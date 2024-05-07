@@ -30,6 +30,12 @@ public class Account {
     @Enumerated(EnumType.STRING)
     private Role role; // PERMISSIONS BASED ON ROLES
     private String refreshToken; // REFRESH TOKEN FROM JWT
+    @Transient
+    private boolean isFirstLogin;
+
+    public void setFirstLogin(boolean firstLogin) {
+        isFirstLogin = firstLogin;
+    }
 
     public void updateRefreshToken(String updateRefreshToken) {
         this.refreshToken = updateRefreshToken;

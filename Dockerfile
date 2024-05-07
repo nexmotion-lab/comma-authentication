@@ -18,10 +18,13 @@ RUN ./gradlew build --no-daemon
 
 FROM eclipse-temurin:17-jdk-alpine as jre-build
 COPY --from=build /app/build/libs/*.jar /app/app.jar
+RUN jar xf /app/app.jar
 RUN $JAVA_HOME/bin/jdeps \
     --ignore-missing-deps \
+    --multi-release 17 \
+    --recursive \
     --print-module-deps \
-    --class-path "/app/app.jar" \
+    --class-path 'BOOT-INF/lib/*' \
     /app/app.jar > /app/deps.info
 
 RUN $JAVA_HOME/bin/jlink \

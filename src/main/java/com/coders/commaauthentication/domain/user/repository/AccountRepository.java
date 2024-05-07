@@ -14,6 +14,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     Optional<Account> findBySocialId(String socialId);
 
+    Optional<Account> findByEmail(String email);
 
     Optional<Account> findByEmailAndSocialType(String email, SocialType socialType);
 

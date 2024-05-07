@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: authentication
+  profiles:
+    active: test
+  config:
+    import: "configserver:http://localhost:8087"
+  cloud:
+    config:
+      fail-fast: true
+      retry:
+        initial-interval: 10000
+        max-attempts: 5
+        multiplier: 1.5
+      request-connect-timeout: 2000
+      request-read-timeout: 10000

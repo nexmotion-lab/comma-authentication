@@ -38,11 +38,11 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
 
     private void loginSuccess(HttpServletResponse response, CustomOAuth2User oAuth2User) throws IOException {
-        String accessToken = jwtService.createAccessToken(oAuth2User.getEmail(), oAuth2User.getSocialType());
-        String refreshToken = jwtService.createRefreshToken();
+        String accessToken = jwtService.createAccessToken(oAuth2User.getEmail(), oAuth2User.getRole());
+        String refreshToken = jwtService.createRefreshToken(oAuth2User.getEmail());
 
         jwtService.sendAccessAndRefreshToken(response, accessToken, refreshToken);
-        jwtService.updateRefreshToken(oAuth2User.getId(), refreshToken);
+        jwtService.updateRefreshToken(oAuth2User.getEmail(), refreshToken);
         log.info("토큰발급");
     }
 

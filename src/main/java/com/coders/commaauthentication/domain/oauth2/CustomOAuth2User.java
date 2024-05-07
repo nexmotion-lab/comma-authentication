@@ -15,7 +15,7 @@ public class CustomOAuth2User extends DefaultOAuth2User {
     private Role role;
     private String email;
     private SocialType socialType;
-    private Long id;
+    private boolean isFirstLogin;
 
     /**
      * Constructs a {@code DefaultOAuth2User} using the provided parameters.
@@ -26,11 +26,11 @@ public class CustomOAuth2User extends DefaultOAuth2User {
      *                         {@link #getAttributes()}
      */
     public CustomOAuth2User(Collection<? extends GrantedAuthority> authorities, Map<String, Object> attributes, String nameAttributeKey
-                            ,Role role, String email, SocialType socialType, Long id) {
+                            ,Role role, String email, SocialType socialType, boolean isFirstLogin) {
         super(authorities, attributes, nameAttributeKey);
         this.role = role;
         this.email = email;
         this.socialType = socialType;
-        this.id = id;
+        this.isFirstLogin = isFirstLogin;
     }
 }
