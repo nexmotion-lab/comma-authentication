@@ -16,6 +16,10 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     Optional<Account> findByEmail(String email);
 
+    Optional<Account> findByEmailAndRefreshToken(String email, String refreshToken);
+
+    boolean existsByRefreshToken(String refreshToken);
+
     Optional<Account> findByEmailAndSocialType(String email, SocialType socialType);
 
     Optional<Account> findBySocialTypeAndSocialId(SocialType socialType, String socialId);

@@ -2,7 +2,7 @@ spring:
   application:
     name: authentication
   profiles:
-    active: test
+    active: localtest
   config:
     import: "configserver:http://localhost:8087"
   cloud:

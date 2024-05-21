@@ -44,7 +44,6 @@ public class JwtService {
     public static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
     public static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
     public static final String EMAIL_CLAIM = "email";
-    public static final String SOCIAL_TYPE_CLAIM = "socialType";
     public static final String BEARER = "Bearer ";
     public static final String ROLE = "Role";
 
@@ -76,6 +75,7 @@ public class JwtService {
         Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
         accessTokenCookie.setMaxAge(accessTokenExpirationPeriod.intValue());
         accessTokenCookie.setHttpOnly(true);
+        accessTokenCookie.setPath("/");
         response.setStatus(HttpServletResponse.SC_OK);
         response.addCookie(accessTokenCookie);
     }
@@ -88,6 +88,7 @@ public class JwtService {
         Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
         accessTokenCookie.setHttpOnly(true);
         accessTokenCookie.setMaxAge(accessTokenExpirationPeriod.intValue());
+        accessTokenCookie.setPath("/");
         response.setStatus(HttpServletResponse.SC_OK);
         response.addCookie(accessTokenCookie);
         log.info("재발급된 Access Token (HTTP-only 쿠키로 설정됨) : {}", accessToken);
@@ -95,6 +96,7 @@ public class JwtService {
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setMaxAge(refreshTokenExpirationPeriod.intValue());
+        refreshTokenCookie.setPath("/");
         response.addCookie(refreshTokenCookie);
 
         log.info("재발급된 Refresh Token (HTTP-only 쿠키로 설정됨) : {}", accessToken);
@@ -111,9 +113,7 @@ public class JwtService {
         return Optional.empty();
     }
 
-    /**
-     * RefreshToken DB 저장(업데이트)
-     */
+
     public void updateRefreshToken(String email, String refreshToken) {
         Account account = accountRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("일치하는 회원이 없습니다."));

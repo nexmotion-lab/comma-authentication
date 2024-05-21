@@ -18,7 +18,7 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")
-    private Long id; // PK
+    private Integer id; // PK
     private String socialId; // ACCOUNT ID FROM RESOURCE SERVER
     private String nickname; // NAME FROM RESOURCE SERVER
     private String email;

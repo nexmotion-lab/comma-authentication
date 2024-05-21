@@ -85,7 +85,7 @@ public class KakaoOAuthUserInfo extends OAuth2UserInfo{
             return null;
         }
 
-        String email = (String) account.get("email");
+        String email = (String) account.get("email") + ":kakao";
 
         if (email == null) {
             return null;
