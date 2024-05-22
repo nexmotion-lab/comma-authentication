@@ -2,9 +2,9 @@ spring:
   application:
     name: authentication
   profiles:
-    active: localtest
+    active: dev
   config:
-    import: "configserver:http://localhost:8087"
+    import: "configserver:http://config-server:8087"
   cloud:
     config:
       fail-fast: true
