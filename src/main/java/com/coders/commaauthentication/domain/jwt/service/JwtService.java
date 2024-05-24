@@ -87,7 +87,7 @@ public class JwtService {
     public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
         Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
         accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setMaxAge(accessTokenExpirationPeriod.intValue());
+        accessTokenCookie.setMaxAge(accessTokenExpirationPeriod.intValue() / 1000);
         accessTokenCookie.setPath("/");
         response.setStatus(HttpServletResponse.SC_OK);
         response.addCookie(accessTokenCookie);
@@ -95,7 +95,7 @@ public class JwtService {
 
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
         refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setMaxAge(refreshTokenExpirationPeriod.intValue());
+        refreshTokenCookie.setMaxAge(refreshTokenExpirationPeriod.intValue() / 1000);
         refreshTokenCookie.setPath("/");
         response.addCookie(refreshTokenCookie);
 

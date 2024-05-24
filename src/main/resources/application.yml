@@ -14,3 +14,7 @@ spring:
         multiplier: 1.5
       request-connect-timeout: 2000
       request-read-timeout: 10000
+
+logging:
+  level:
+    web: debug
