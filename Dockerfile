@@ -48,7 +48,4 @@ COPY --from=jre-build /javaruntime $JAVA_HOME
 WORKDIR /app
 COPY --from=jre-build /app/app.jar /app/app.jar
 
-COPY keystore.jks /app/keystore.jks
-COPY truststore.jks /app/truststore.jks
-
 CMD ["java", "-jar", "/app/app.jar"]
