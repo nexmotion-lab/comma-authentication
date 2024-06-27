@@ -7,6 +7,7 @@ import com.coders.commaauthentication.domain.user.repository.AccountRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -21,7 +22,6 @@ import java.io.IOException;
 public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private final JwtService jwtService;
-    private final AccountRepository accountRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -29,11 +29,10 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
         loginSuccess(response, oAuth2User);
-        String redirectURL = getRedirectURL(request);
-        if (redirectURL != null) {
-            response.sendRedirect(redirectURL);
-        }
-            response.sendRedirect("http://gateway/home");
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write("{\"firstLogin\":\"" + oAuth2User.isFirstLogin() + "\"}");
     }
 
 
@@ -45,16 +44,6 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         jwtService.updateRefreshToken(oAuth2User.getEmail(), refreshToken);
         log.info("토큰발급");
     }
-
-    private String getRedirectURL(HttpServletRequest request) {
-        String[] redirectURLs = request.getParameterValues("redirectURL");
-        if (redirectURLs != null && redirectURLs.length > 0) {
-            return redirectURLs[0];
-        }
-
-        return null;
-    }
-
 
 
 
