@@ -30,8 +30,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
         loginSuccess(response, oAuth2User);
 
-        if (oAuth2User.isFirstLogin()) response.sendRedirect("comma://home");
-        else response.sendRedirect("comma://firstLogin");
+        if (oAuth2User.isFirstLogin()) response.sendRedirect("comma://firstLogin");
+        else response.sendRedirect("comma://home");
     }
 
 
