@@ -30,9 +30,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
         loginSuccess(response, oAuth2User);
 
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write("{\"firstLogin\":\"" + oAuth2User.isFirstLogin() + "\"}");
+        if (oAuth2User.isFirstLogin()) response.sendRedirect("comma://home");
+        else response.sendRedirect("comma://firstLogin");
     }
 
 
@@ -44,8 +43,5 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         jwtService.updateRefreshToken(oAuth2User.getEmail(), refreshToken);
         log.info("토큰발급");
     }
-
-
-
 
 }
