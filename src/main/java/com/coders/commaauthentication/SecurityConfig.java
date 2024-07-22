@@ -42,7 +42,7 @@ public class SecurityConfig {
                 //== URL별 권한 관리 옵션 ==//
                 .authorizeRequests()
                 // 아이콘, css, js 관련
-                .requestMatchers("/jwt/**").permitAll()
+                .requestMatchers("/jwt/**", "/account/**").permitAll()
                 .anyRequest().authenticated() // 위의 경로 이외에는 모두 인증된 사용자만 접근 가능
                 .and()
                 //== 소셜 로그인 설정 ==//
