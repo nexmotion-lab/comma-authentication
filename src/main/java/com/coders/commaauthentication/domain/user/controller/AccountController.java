@@ -19,7 +19,7 @@ public class AccountController {
     private final AccountRepository accountRepository;
 
     @GetMapping("/findByEmail")
-    public ResponseEntity<String> findAccountIdByEmail(@RequestBody String email) {
+    public ResponseEntity<String> findAccountIdByEmail(@RequestParam String email) {
 
         return accountRepository.findIdByEmail(email)
                 .map(id -> ResponseEntity.ok(id.toString()))
