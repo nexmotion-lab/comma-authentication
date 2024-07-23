@@ -44,4 +44,5 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         log.info("토큰발급");
     }
 
+
 }

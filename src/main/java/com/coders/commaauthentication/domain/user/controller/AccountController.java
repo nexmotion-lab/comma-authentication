@@ -4,6 +4,7 @@ package com.coders.commaauthentication.domain.user.controller;
 import com.coders.commaauthentication.domain.user.Account;
 import com.coders.commaauthentication.domain.user.Gender;
 import com.coders.commaauthentication.domain.user.controller.service.AccountService;
+import com.coders.commaauthentication.domain.user.dto.AccountInfoDTO;
 import com.coders.commaauthentication.domain.user.repository.AccountRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Size;
@@ -47,4 +48,11 @@ public class AccountController {
         String name = accountService.updateAccountName(Long.parseLong(request.getHeader("X-User-Id")), nickname);
         return ResponseEntity.ok(name);
     }
+
+    @GetMapping("/info")
+    public ResponseEntity<AccountInfoDTO> getAccountInfo(HttpServletRequest request) {
+        AccountInfoDTO accountInfo = accountService.getAccountInfo(Long.parseLong(request.getHeader("X-User-Id")));
+        return ResponseEntity.ok(accountInfo);
+    }
+
 }

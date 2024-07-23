@@ -34,6 +34,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @Query("UPDATE Account a SET a.nickname = :nickname WHERE a.id = :id")
     void updateAccountName(Long id, String nickname);
 
+
     boolean existsByRefreshToken(String refreshToken);
 
     Optional<Account> findByEmailAndSocialType(String email, SocialType socialType);

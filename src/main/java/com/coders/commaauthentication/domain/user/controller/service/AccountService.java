@@ -1,6 +1,8 @@
 package com.coders.commaauthentication.domain.user.controller.service;
 
+import com.coders.commaauthentication.domain.user.Account;
 import com.coders.commaauthentication.domain.user.Gender;
+import com.coders.commaauthentication.domain.user.dto.AccountInfoDTO;
 import com.coders.commaauthentication.domain.user.repository.AccountRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,5 +34,11 @@ public class AccountService {
     public String updateAccountName(Long id, String nickname) {
         accountRepository.updateAccountName(id, nickname);
         return nickname;
+    }
+
+    public AccountInfoDTO getAccountInfo(Long id) {
+        Account account = accountRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("존재하는 계정 정보가 없습니다."));
+        return new AccountInfoDTO(account.getNickname(), account.getGender(), account.getBirthdate());
+
     }
 }
