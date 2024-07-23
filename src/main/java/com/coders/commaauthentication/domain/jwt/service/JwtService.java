@@ -89,6 +89,7 @@ public class JwtService {
         accessTokenCookie.setHttpOnly(true);
         accessTokenCookie.setMaxAge(accessTokenExpirationPeriod.intValue() / 1000);
         accessTokenCookie.setPath("/");
+
         response.setStatus(HttpServletResponse.SC_OK);
         response.addCookie(accessTokenCookie);
         log.info("재발급된 Access Token (HTTP-only 쿠키로 설정됨) : {}", accessToken);
