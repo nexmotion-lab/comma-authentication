@@ -85,23 +85,37 @@ public class JwtService {
      * AccessToken + RefreshToken 헤더에 실어서 보내기
      */
     public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
+        // Access Token Cookie 설정
         Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
         accessTokenCookie.setHttpOnly(true);
         accessTokenCookie.setMaxAge(accessTokenExpirationPeriod.intValue() / 1000);
         accessTokenCookie.setPath("/");
+        accessTokenCookie.setSecure(true);
 
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.addCookie(accessTokenCookie);
+        // SameSite 속성 추가
+        response.addHeader("Set-Cookie", String.format("%s; %s; %s; SameSite=None",
+                accessTokenCookie.getName() + "=" + accessTokenCookie.getValue(),
+                "Path=" + accessTokenCookie.getPath(),
+                "Max-Age=" + accessTokenCookie.getMaxAge()));
+
         log.info("재발급된 Access Token (HTTP-only 쿠키로 설정됨) : {}", accessToken);
 
+        // Refresh Token Cookie 설정
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setMaxAge(refreshTokenExpirationPeriod.intValue() / 1000);
         refreshTokenCookie.setPath("/");
-        response.addCookie(refreshTokenCookie);
+        refreshTokenCookie.setSecure(true);
 
-        log.info("재발급된 Refresh Token (HTTP-only 쿠키로 설정됨) : {}", accessToken);
+        // SameSite 속성 추가
+        response.addHeader("Set-Cookie", String.format("%s; %s; %s; SameSite=None",
+                refreshTokenCookie.getName() + "=" + refreshTokenCookie.getValue(),
+                "Path=" + refreshTokenCookie.getPath(),
+                "Max-Age=" + refreshTokenCookie.getMaxAge()));
+
+        log.info("재발급된 Refresh Token (HTTP-only 쿠키로 설정됨) : {}", refreshToken);
     }
+
 
     public Optional<String> extractRefreshToken(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
