@@ -81,9 +81,6 @@ public class JwtService {
     }
 
 
-    /**
-     * AccessToken + RefreshToken 헤더에 실어서 보내기
-     */
     public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
         // Access Token Cookie 설정
         Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
@@ -92,12 +89,14 @@ public class JwtService {
         accessTokenCookie.setPath("/");
         accessTokenCookie.setSecure(true);
 
-        // SameSite 속성 추가
-        response.addHeader("Set-Cookie", String.format("%s; %s; %s; SameSite=None",
-                accessTokenCookie.getName() + "=" + accessTokenCookie.getValue(),
-                "Path=" + accessTokenCookie.getPath(),
-                "Max-Age=" + accessTokenCookie.getMaxAge()));
+        // Set-Cookie 헤더에 SameSite 속성 추가
+        String accessTokenCookieHeader = String.format("%s=%s; Path=%s; Max-Age=%d; HttpOnly; Secure; SameSite=None",
+                accessTokenCookie.getName(),
+                accessTokenCookie.getValue(),
+                accessTokenCookie.getPath(),
+                accessTokenCookie.getMaxAge());
 
+        response.addHeader("Set-Cookie", accessTokenCookieHeader);
         log.info("재발급된 Access Token (HTTP-only 쿠키로 설정됨) : {}", accessToken);
 
         // Refresh Token Cookie 설정
@@ -107,14 +106,17 @@ public class JwtService {
         refreshTokenCookie.setPath("/");
         refreshTokenCookie.setSecure(true);
 
-        // SameSite 속성 추가
-        response.addHeader("Set-Cookie", String.format("%s; %s; %s; SameSite=None",
-                refreshTokenCookie.getName() + "=" + refreshTokenCookie.getValue(),
-                "Path=" + refreshTokenCookie.getPath(),
-                "Max-Age=" + refreshTokenCookie.getMaxAge()));
+        // Set-Cookie 헤더에 SameSite 속성 추가
+        String refreshTokenCookieHeader = String.format("%s=%s; Path=%s; Max-Age=%d; HttpOnly; Secure; SameSite=None",
+                refreshTokenCookie.getName(),
+                refreshTokenCookie.getValue(),
+                refreshTokenCookie.getPath(),
+                refreshTokenCookie.getMaxAge());
 
+        response.addHeader("Set-Cookie", refreshTokenCookieHeader);
         log.info("재발급된 Refresh Token (HTTP-only 쿠키로 설정됨) : {}", refreshToken);
     }
+
 
 
     public Optional<String> extractRefreshToken(HttpServletRequest request) {
