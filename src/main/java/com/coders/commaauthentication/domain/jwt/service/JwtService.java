@@ -82,14 +82,12 @@ public class JwtService {
 
 
     public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
-        // Access Token Cookie 설정
         Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
         accessTokenCookie.setHttpOnly(true);
         accessTokenCookie.setMaxAge(accessTokenExpirationPeriod.intValue() / 1000);
         accessTokenCookie.setPath("/");
         accessTokenCookie.setSecure(true);
 
-        // Set-Cookie 헤더에 SameSite 속성 추가
         String accessTokenCookieHeader = String.format("%s=%s; Path=%s; Max-Age=%d; HttpOnly; Secure; SameSite=None",
                 accessTokenCookie.getName(),
                 accessTokenCookie.getValue(),
@@ -99,14 +97,12 @@ public class JwtService {
         response.addHeader("Set-Cookie", accessTokenCookieHeader);
         log.info("재발급된 Access Token (HTTP-only 쿠키로 설정됨) : {}", accessToken);
 
-        // Refresh Token Cookie 설정
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setMaxAge(refreshTokenExpirationPeriod.intValue() / 1000);
         refreshTokenCookie.setPath("/");
         refreshTokenCookie.setSecure(true);
 
-        // Set-Cookie 헤더에 SameSite 속성 추가
         String refreshTokenCookieHeader = String.format("%s=%s; Path=%s; Max-Age=%d; HttpOnly; Secure; SameSite=None",
                 refreshTokenCookie.getName(),
                 refreshTokenCookie.getValue(),
@@ -135,7 +131,7 @@ public class JwtService {
         Account account = accountRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("일치하는 회원이 없습니다."));
         account.updateRefreshToken(refreshToken);
-        accountRepository.save(account);  // 변경된 리프레시 토큰을 DB에 저장
+        accountRepository.save(account);
         log.info(account.toString());
     }
 }

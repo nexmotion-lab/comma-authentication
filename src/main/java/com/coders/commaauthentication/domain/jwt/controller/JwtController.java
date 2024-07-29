@@ -7,6 +7,7 @@ import com.coders.commaauthentication.domain.user.Role;
 import com.coders.commaauthentication.domain.user.repository.AccountRepository;
 import jakarta.ws.rs.Path;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/jwt")
 @AllArgsConstructor
+@Slf4j
 public class JwtController {
 
     private final JwtService jwtService;
@@ -40,6 +42,7 @@ public class JwtController {
     public ResponseEntity<TokenResponse> createRefreshAndAccessToken(@PathVariable String email, @RequestBody TokenRequest refreshToken) {
         TokenResponse jwtToken = accountRepository.findByEmailAndRefreshToken(email, refreshToken.getRefreshToken())
                 .map(account -> {
+                    log.info(account.getRefreshToken() + "찾은 토큰");
                     TokenResponse tokens = new TokenResponse();
                     tokens.setAccessToken(jwtService.createAccessToken(email, account.getRole()));
                     String newRefreshToken = jwtService.createRefreshToken(email);
