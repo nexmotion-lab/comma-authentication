@@ -49,8 +49,7 @@ public class JwtController {
                     tokens.setRefreshToken(newRefreshToken);
                     jwtService.updateRefreshToken(email, newRefreshToken);
                     return tokens;
-                })
-                .orElseThrow(() -> new RuntimeException("Account not found for email: " + email + refreshToken.getRefreshToken()));
+                }).orElseThrow();
         return ResponseEntity.ok(jwtToken);
     }
 
