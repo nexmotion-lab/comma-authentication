@@ -5,12 +5,15 @@ import com.coders.commaauthentication.domain.jwt.model.TokenResponse;
 import com.coders.commaauthentication.domain.jwt.service.JwtService;
 import com.coders.commaauthentication.domain.user.Role;
 import com.coders.commaauthentication.domain.user.repository.AccountRepository;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.Path;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +25,32 @@ public class JwtController {
 
     private final JwtService jwtService;
     private final AccountRepository accountRepository;
+
+    @GetMapping("/resend")
+    public ResponseEntity<TokenResponse> resendToken(HttpServletRequest request) {
+        String accessToken = null;
+        String refreshToken = null;
+
+        if (request.getCookies() != null) {
+            accessToken = Arrays.stream(request.getCookies())
+                    .filter(cookie -> "accessToken".equals(cookie.getName()))
+                    .map(Cookie::getValue)
+                    .findFirst()
+                    .orElse(null);
+
+            refreshToken = Arrays.stream(request.getCookies())
+                    .filter(cookie -> "refreshToken".equals(cookie.getName()))
+                    .map(Cookie::getValue)
+                    .findFirst()
+                    .orElse(null);
+        }
+
+        // TokenResponse 객체 생성
+        TokenResponse tokenResponse = new TokenResponse(accessToken, refreshToken);
+
+        // 응답 반환
+        return ResponseEntity.ok(tokenResponse);
+    }
 
     @PostMapping("/createRefreshToken/{email}")
     public Map<String, String> createRefreshToken(@PathVariable String email) {
