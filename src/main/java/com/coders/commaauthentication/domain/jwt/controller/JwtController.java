@@ -26,31 +26,7 @@ public class JwtController {
     private final JwtService jwtService;
     private final AccountRepository accountRepository;
 
-    @GetMapping("/resend")
-    public ResponseEntity<TokenResponse> resendToken(HttpServletRequest request) {
-        String accessToken = null;
-        String refreshToken = null;
 
-        if (request.getCookies() != null) {
-            accessToken = Arrays.stream(request.getCookies())
-                    .filter(cookie -> "accessToken".equals(cookie.getName()))
-                    .map(Cookie::getValue)
-                    .findFirst()
-                    .orElse(null);
-
-            refreshToken = Arrays.stream(request.getCookies())
-                    .filter(cookie -> "refreshToken".equals(cookie.getName()))
-                    .map(Cookie::getValue)
-                    .findFirst()
-                    .orElse(null);
-        }
-
-        // TokenResponse 객체 생성
-        TokenResponse tokenResponse = new TokenResponse(accessToken, refreshToken);
-
-        // 응답 반환
-        return ResponseEntity.ok(tokenResponse);
-    }
 
     @PostMapping("/createRefreshToken/{email}")
     public Map<String, String> createRefreshToken(@PathVariable String email) {

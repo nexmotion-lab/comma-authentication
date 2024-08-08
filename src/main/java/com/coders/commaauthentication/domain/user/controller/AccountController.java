@@ -1,11 +1,13 @@
 package com.coders.commaauthentication.domain.user.controller;
 
 
+import com.coders.commaauthentication.domain.jwt.model.TokenResponse;
 import com.coders.commaauthentication.domain.user.Account;
 import com.coders.commaauthentication.domain.user.Gender;
 import com.coders.commaauthentication.domain.user.controller.service.AccountService;
 import com.coders.commaauthentication.domain.user.dto.AccountInfoDTO;
 import com.coders.commaauthentication.domain.user.repository.AccountRepository;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -19,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 
 @RestController
 @AllArgsConstructor
@@ -26,6 +29,32 @@ import java.time.LocalDate;
 public class AccountController {
 
     private final AccountService accountService;
+
+    @GetMapping("/token/resend")
+    public ResponseEntity<TokenResponse> resendToken(HttpServletRequest request) {
+        String accessToken = null;
+        String refreshToken = null;
+
+        if (request.getCookies() != null) {
+            accessToken = Arrays.stream(request.getCookies())
+                    .filter(cookie -> "accessToken".equals(cookie.getName()))
+                    .map(Cookie::getValue)
+                    .findFirst()
+                    .orElse(null);
+
+            refreshToken = Arrays.stream(request.getCookies())
+                    .filter(cookie -> "refreshToken".equals(cookie.getName()))
+                    .map(Cookie::getValue)
+                    .findFirst()
+                    .orElse(null);
+        }
+
+        // TokenResponse 객체 생성
+        TokenResponse tokenResponse = new TokenResponse(accessToken, refreshToken);
+
+        // 응답 반환
+        return ResponseEntity.ok(tokenResponse);
+    }
 
     @GetMapping("/findByEmail")
     public ResponseEntity<String> findAccountIdByEmail(@RequestParam String email) {
