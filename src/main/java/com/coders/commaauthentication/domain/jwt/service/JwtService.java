@@ -82,34 +82,14 @@ public class JwtService {
 
 
     public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
-        Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
-        accessTokenCookie.setMaxAge(accessTokenExpirationPeriod.intValue() / 1000);
-        accessTokenCookie.setPath("/");
-        accessTokenCookie.setSecure(true);
+        String authorizationHeader = String.format("Bearer %s, accessToken=%s, refreshToken=%s", accessToken, accessToken, refreshToken);
 
-        String accessTokenCookieHeader = String.format("%s=%s; Path=%s; Max-Age=%d; Secure; SameSite=None",
-                accessTokenCookie.getName(),
-                accessTokenCookie.getValue(),
-                accessTokenCookie.getPath(),
-                accessTokenCookie.getMaxAge());
+        response.addHeader("Authorization", authorizationHeader);
 
-        response.addHeader("Set-Cookie", accessTokenCookieHeader);
-        log.info("재발급된 Access Token (HTTP-only 쿠키로 설정됨) : {}", accessToken);
-
-        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
-        refreshTokenCookie.setMaxAge(refreshTokenExpirationPeriod.intValue() / 1000);
-        refreshTokenCookie.setPath("/");
-        refreshTokenCookie.setSecure(true);
-
-        String refreshTokenCookieHeader = String.format("%s=%s; Path=%s; Max-Age=%d; Secure; SameSite=None",
-                refreshTokenCookie.getName(),
-                refreshTokenCookie.getValue(),
-                refreshTokenCookie.getPath(),
-                refreshTokenCookie.getMaxAge());
-
-        response.addHeader("Set-Cookie", refreshTokenCookieHeader);
-        log.info("재발급된 Refresh Token (HTTP-only 쿠키로 설정됨) : {}", refreshToken);
+        log.info("재발급된 Access Token : {}", accessToken);
+        log.info("재발급된 Refresh Token : {}", refreshToken);
     }
+
 
 
 
