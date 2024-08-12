@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -39,7 +40,24 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         String accessToken = jwtService.createAccessToken(oAuth2User.getEmail(), oAuth2User.getRole());
         String refreshToken = jwtService.createRefreshToken(oAuth2User.getEmail());
 
-        jwtService.sendAccessAndRefreshToken(response, accessToken, refreshToken);
+        ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", accessToken)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(3600)
+                .sameSite("None")
+                .build();
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(1209600)
+                .sameSite("None")
+                .build();
+
+        response.addHeader("Set-Cookie", accessTokenCookie.toString());
+        response.addHeader("Set-Cookie", refreshTokenCookie.toString());
+
         jwtService.updateRefreshToken(oAuth2User.getEmail(), refreshToken);
         log.info("토큰발급");
     }
