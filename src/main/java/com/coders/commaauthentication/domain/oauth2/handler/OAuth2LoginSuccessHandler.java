@@ -16,6 +16,9 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Component
@@ -29,37 +32,21 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         log.info("OAuth2 Login 성공!");
 
         CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
-        loginSuccess(response, oAuth2User);
+        String url = loginSuccess(oAuth2User);
 
-        if (oAuth2User.isFirstLogin()) response.sendRedirect("comma://firstLogin");
-        else response.sendRedirect("comma://home");
+        if (oAuth2User.isFirstLogin()) response.sendRedirect("comma://firstLogin" + url);
+        else response.sendRedirect("comma://home" + url);
     }
 
 
-    private void loginSuccess(HttpServletResponse response, CustomOAuth2User oAuth2User) throws IOException {
+    private String loginSuccess(CustomOAuth2User oAuth2User) throws UnsupportedEncodingException {
         String accessToken = jwtService.createAccessToken(oAuth2User.getEmail(), oAuth2User.getRole());
         String refreshToken = jwtService.createRefreshToken(oAuth2User.getEmail());
-
-        ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", accessToken)
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .maxAge(3600)
-                .sameSite("None")
-                .build();
-        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken)
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .maxAge(1209600)
-                .sameSite("None")
-                .build();
-
-        response.addHeader("Set-Cookie", accessTokenCookie.toString());
-        response.addHeader("Set-Cookie", refreshTokenCookie.toString());
-
         jwtService.updateRefreshToken(oAuth2User.getEmail(), refreshToken);
-        log.info("토큰발급");
+
+        return String.format("?accessToken=%s&refreshToken=%s",
+                URLEncoder.encode(accessToken, StandardCharsets.UTF_8),
+                URLEncoder.encode(refreshToken, StandardCharsets.UTF_8));
     }
 
 
