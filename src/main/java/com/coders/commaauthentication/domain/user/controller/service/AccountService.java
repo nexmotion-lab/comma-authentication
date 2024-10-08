@@ -26,6 +26,11 @@ public class AccountService {
     }
 
     @Transactional
+    public void deleteAccount(Long id) {
+        accountRepository.deleteById(id);
+    }
+
+    @Transactional
     public void updateAccountInfo(Long id, Gender gender, LocalDate birthdate, String nickname) {
         accountRepository.updateAccountInfo(id, gender, birthdate, nickname);
     }
