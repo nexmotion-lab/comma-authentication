@@ -48,10 +48,8 @@ public class AccountController {
                     .orElse(null);
         }
 
-        // TokenResponse 객체 생성
         TokenResponse tokenResponse = new TokenResponse(accessToken, refreshToken);
 
-        // 응답 반환
         return ResponseEntity.ok(tokenResponse);
     }
 
@@ -81,6 +79,12 @@ public class AccountController {
     public ResponseEntity<AccountInfoDTO> getAccountInfo(HttpServletRequest request) {
         AccountInfoDTO accountInfo = accountService.getAccountInfo(Long.parseLong(request.getHeader("X-User-Id")));
         return ResponseEntity.ok(accountInfo);
+    }
+
+    @DeleteMapping()
+    public ResponseEntity<Void> deleteAccount(@RequestHeader("X-User-Id") Long accountId) {
+        accountService.deleteAccount(accountId);
+        return ResponseEntity.ok().build();
     }
 
 }
