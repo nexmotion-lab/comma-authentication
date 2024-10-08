@@ -81,7 +81,7 @@ public class AccountController {
         return ResponseEntity.ok(accountInfo);
     }
 
-    @DeleteMapping()
+    @DeleteMapping("/")
     public ResponseEntity<Void> deleteAccount(@RequestHeader("X-User-Id") Long accountId) {
         accountService.deleteAccount(accountId);
         return ResponseEntity.ok().build();
