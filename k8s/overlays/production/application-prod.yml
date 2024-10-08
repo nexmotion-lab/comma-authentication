@@ -1,0 +1,10 @@
+security:
+  oauth2:
+    client:
+      registration:
+        google:
+          redirectUri: http://www.comma-coders.com:8998/login/oauth2/code/google
+        kakao:
+          redirectUri: http://www.comma-coders.com:8998/login/oauth2/code/kakao
+        naver:
+          redirectUri: http://www.comma-coders.com:8998/login/oauth2/code/naver

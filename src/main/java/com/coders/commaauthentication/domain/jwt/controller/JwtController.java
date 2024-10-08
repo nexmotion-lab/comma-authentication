@@ -7,11 +7,12 @@ import com.coders.commaauthentication.domain.user.Role;
 import com.coders.commaauthentication.domain.user.repository.AccountRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.ws.rs.Path;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -47,14 +48,13 @@ public class JwtController {
     public ResponseEntity<TokenResponse> createRefreshAndAccessToken(@PathVariable String email, @RequestBody TokenRequest refreshToken) {
         TokenResponse jwtToken = accountRepository.findByEmailAndRefreshToken(email, refreshToken.getRefreshToken())
                 .map(account -> {
-                    log.info(account.getRefreshToken() + "찾은 토큰");
                     TokenResponse tokens = new TokenResponse();
                     tokens.setAccessToken(jwtService.createAccessToken(email, account.getRole()));
                     String newRefreshToken = jwtService.createRefreshToken(email);
                     tokens.setRefreshToken(newRefreshToken);
                     jwtService.updateRefreshToken(email, newRefreshToken);
                     return tokens;
-                }).orElseThrow();
+                }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
         return ResponseEntity.ok(jwtToken);
     }
 

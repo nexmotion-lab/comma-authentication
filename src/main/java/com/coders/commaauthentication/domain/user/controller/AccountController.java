@@ -12,7 +12,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bouncycastle.math.ec.ECMultiplier;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

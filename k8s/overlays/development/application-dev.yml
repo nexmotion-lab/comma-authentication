@@ -1,0 +1,10 @@
+security:
+  oauth2:
+    client:
+      registration:
+        google:
+          redirectUri: http://localhost:9000/login/oauth2/code/google
+        kakao:
+          redirectUri: http://localhost:9000/login/oauth2/code/kakao
+        naver:
+          redirectUri: http://localhost:9000/login/oauth2/code/naver
