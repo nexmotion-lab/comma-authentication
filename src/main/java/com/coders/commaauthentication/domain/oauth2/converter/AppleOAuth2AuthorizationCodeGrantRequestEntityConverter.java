@@ -3,6 +3,7 @@ package com.coders.commaauthentication.domain.oauth2.converter;
 import com.coders.commaauthentication.domain.oauth2.jwt.AppleClientSecretGenerator;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequestEntityConverter;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Component
 @AllArgsConstructor
+@Slf4j
 public class AppleOAuth2AuthorizationCodeGrantRequestEntityConverter extends OAuth2AuthorizationCodeGrantRequestEntityConverter {
 
     private static final String CLIENT_SECRET_KEY = "client_secret";
@@ -22,6 +24,7 @@ public class AppleOAuth2AuthorizationCodeGrantRequestEntityConverter extends OAu
 
     @Override
     protected MultiValueMap<String, String> createParameters(OAuth2AuthorizationCodeGrantRequest authorizationCodeGrantRequest) {
+        log.info("컨버팅 시작");
         var clientRegistrationId = authorizationCodeGrantRequest.getClientRegistration().getRegistrationId();
         if (APPLE_REGISTRATION_ID.equalsIgnoreCase(clientRegistrationId)) {
             var encryptedPrivateKey = appleClientSecretGenerator.createClientSecret();
