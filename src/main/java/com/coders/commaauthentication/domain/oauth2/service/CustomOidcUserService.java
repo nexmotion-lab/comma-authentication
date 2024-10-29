@@ -6,6 +6,7 @@ import com.coders.commaauthentication.domain.user.Account;
 import com.coders.commaauthentication.domain.user.SocialType;
 import com.coders.commaauthentication.domain.user.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
@@ -18,6 +19,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CustomOidcUserService extends OidcUserService {
 
     private final AccountRepository accountRepository;
@@ -26,6 +28,7 @@ public class CustomOidcUserService extends OidcUserService {
 
     @Override
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
+        log.info("OIDC 로그인 요청 진입");
         OidcUser oidcUser = super.loadUser(userRequest);
 
         SocialType socialType = getSocialType(userRequest.getClientRegistration().getRegistrationId());
