@@ -29,7 +29,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-
+        log.info("로그인 성공");
         CustomUser user = (CustomUser) authentication.getPrincipal();
 
         String url = loginSuccess(user);
