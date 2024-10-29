@@ -43,12 +43,7 @@ public class SecurityConfig {
         return tokenResponseClient;
     }
 
-    @Bean
-    public OidcAuthorizationCodeAuthenticationProvider authorizationCodeAuthenticationProvider(
-            OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> accessTokenResponseClient
-    ) {
-        return new OidcAuthorizationCodeAuthenticationProvider(accessTokenResponseClient, new OidcUserService());
-    }
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -75,8 +70,5 @@ public class SecurityConfig {
                 .userInfoEndpoint().userService(customOAuth2UserService).oidcUserService(customOidcUserService);
         return http.build();
     }
-
-
-
 
 }
