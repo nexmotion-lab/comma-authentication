@@ -1,9 +1,6 @@
 package com.coders.commaauthentication.domain.oauth2;
 
-import com.coders.commaauthentication.domain.oauth2.userinfo.GoogleOAuth2UserInfo;
-import com.coders.commaauthentication.domain.oauth2.userinfo.KakaoOAuthUserInfo;
-import com.coders.commaauthentication.domain.oauth2.userinfo.NaverOAuth2UserInfo;
-import com.coders.commaauthentication.domain.oauth2.userinfo.OAuth2UserInfo;
+import com.coders.commaauthentication.domain.oauth2.userinfo.*;
 import com.coders.commaauthentication.domain.user.Account;
 import com.coders.commaauthentication.domain.user.Role;
 import com.coders.commaauthentication.domain.user.SocialType;
@@ -34,6 +31,9 @@ public class OAuthAttributes {
         if (socialType == SocialType.KAKAO) {
             return ofKakao(userNameAttributeName, attributes);
         }
+        if (socialType == SocialType.APPLE) {
+            return ofApple(userNameAttributeName, attributes);
+        }
         return ofGoogle(userNameAttributeName, attributes);
     }
 
@@ -55,6 +55,13 @@ public class OAuthAttributes {
         return OAuthAttributes.builder()
                 .nameAttributeKey(userNameAttribute)
                 .oAuth2UserInfo(new NaverOAuth2UserInfo(attributes))
+                .build();
+    }
+
+    public static OAuthAttributes ofApple(String userNameAttribute, Map<String, Object> attributes) {
+        return OAuthAttributes.builder()
+                .nameAttributeKey(userNameAttribute)
+                .oAuth2UserInfo(new AppleOAuth2UserInfo(attributes))
                 .build();
     }
 

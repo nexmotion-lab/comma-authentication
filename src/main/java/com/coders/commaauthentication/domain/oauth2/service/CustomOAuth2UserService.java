@@ -1,6 +1,6 @@
 package com.coders.commaauthentication.domain.oauth2.service;
 
-import com.coders.commaauthentication.domain.oauth2.CustomOAuth2User;
+import com.coders.commaauthentication.domain.oauth2.user.CustomOAuth2User;
 import com.coders.commaauthentication.domain.oauth2.OAuthAttributes;
 import com.coders.commaauthentication.domain.user.Account;
 import com.coders.commaauthentication.domain.user.SocialType;
@@ -28,6 +28,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     private static final String NAVER = "naver";
     private static final String KAKAO = "kakao";
 
+
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         log.info("CustomOAuthUserService.loadUser() 실행 - OAuth2 로그인 요청 진입");
@@ -36,6 +37,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
+
         SocialType socialType = getSocialType(registrationId);
         String userNameAttributeName = userRequest.getClientRegistration()
                 .getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
@@ -51,7 +53,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 extractAttributes.getNameAttributeKey(),
                 createdUser.getRole(),
                 createdUser.getEmail(),
-                socialType,
                 createdUser.isFirstLogin()
         );
     }
