@@ -16,7 +16,6 @@ spring:
       request-read-timeout: 10000
 
 
-
 logging:
   level:
     web: debug
