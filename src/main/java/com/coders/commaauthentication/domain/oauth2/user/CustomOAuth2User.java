@@ -1,4 +1,4 @@
-package com.coders.commaauthentication.domain.oauth2;
+package com.coders.commaauthentication.domain.oauth2.user;
 
 import com.coders.commaauthentication.domain.user.Role;
 import com.coders.commaauthentication.domain.user.SocialType;
@@ -10,11 +10,10 @@ import java.util.Collection;
 import java.util.Map;
 
 @Getter
-public class CustomOAuth2User extends DefaultOAuth2User {
+public class CustomOAuth2User extends DefaultOAuth2User implements CustomUser{
 
     private Role role;
     private String email;
-    private SocialType socialType;
     private boolean isFirstLogin;
 
     /**
@@ -26,11 +25,10 @@ public class CustomOAuth2User extends DefaultOAuth2User {
      *                         {@link #getAttributes()}
      */
     public CustomOAuth2User(Collection<? extends GrantedAuthority> authorities, Map<String, Object> attributes, String nameAttributeKey
-                            ,Role role, String email, SocialType socialType, boolean isFirstLogin) {
+                            ,Role role, String email, boolean isFirstLogin) {
         super(authorities, attributes, nameAttributeKey);
         this.role = role;
         this.email = email;
-        this.socialType = socialType;
         this.isFirstLogin = isFirstLogin;
     }
 }

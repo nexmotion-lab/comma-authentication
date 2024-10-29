@@ -1,17 +1,17 @@
 package com.coders.commaauthentication.domain.oauth2.handler;
 
 import com.coders.commaauthentication.domain.jwt.service.JwtService;
-import com.coders.commaauthentication.domain.oauth2.CustomOAuth2User;
-import com.coders.commaauthentication.domain.user.Role;
-import com.coders.commaauthentication.domain.user.repository.AccountRepository;
+import com.coders.commaauthentication.domain.oauth2.user.CustomOAuth2User;
+import com.coders.commaauthentication.domain.oauth2.user.CustomOidcUser;
+import com.coders.commaauthentication.domain.oauth2.user.CustomUser;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -29,17 +29,17 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        log.info("OAuth2 Login 성공!");
 
-        CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
-        String url = loginSuccess(oAuth2User);
+        CustomUser user = (CustomUser) authentication.getPrincipal();
 
-        if (oAuth2User.isFirstLogin()) response.sendRedirect("comma://firstLogin" + url);
+        String url = loginSuccess(user);
+
+        if (user.isFirstLogin()) response.sendRedirect("comma://firstLogin" + url);
         else response.sendRedirect("comma://home" + url);
     }
 
 
-    private String loginSuccess(CustomOAuth2User oAuth2User) throws UnsupportedEncodingException {
+    private String loginSuccess(CustomUser oAuth2User) throws UnsupportedEncodingException {
         String accessToken = jwtService.createAccessToken(oAuth2User.getEmail(), oAuth2User.getRole());
         String refreshToken = jwtService.createRefreshToken(oAuth2User.getEmail());
         jwtService.updateRefreshToken(oAuth2User.getEmail(), refreshToken);

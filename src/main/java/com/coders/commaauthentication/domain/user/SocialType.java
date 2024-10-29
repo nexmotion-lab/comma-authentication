@@ -3,5 +3,5 @@ package com.coders.commaauthentication.domain.user;
 import lombok.ToString;
 
 public enum SocialType {
-    NAVER, GOOGLE, KAKAO
+    NAVER, GOOGLE, KAKAO, APPLE
 }
