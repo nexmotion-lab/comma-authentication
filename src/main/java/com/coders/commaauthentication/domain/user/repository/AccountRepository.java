@@ -13,12 +13,6 @@ import java.util.Optional;
 
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
-    Optional<Account> findByNickname(String name);
-
-    Optional<Account> findById(Long id);
-
-    Optional<Account> findBySocialId(String socialId);
-
     Optional<Account> findByEmail(String email);
 
     Optional<Account> findByEmailAndRefreshToken(String email, String refreshToken);
@@ -35,10 +29,5 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     void updateAccountName(Long id, String nickname);
 
 
-    boolean existsByRefreshToken(String refreshToken);
-
-    Optional<Account> findByEmailAndSocialType(String email, SocialType socialType);
-
-    Optional<Account> findBySocialTypeAndSocialId(SocialType socialType, String socialId);
 
 }
