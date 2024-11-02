@@ -56,8 +56,8 @@ jobs:
           password: ${{ secrets.DEPLOY_SERVER_PASSWORD }}
           script: |
             cd /root/comma/excuteDockerCompose
-            docker-compose pull authentication
-            docker-compose up -d --no-deps authentication
+            docker compose pull authentication
+            docker compose up -d --no-deps authentication
 
           
           

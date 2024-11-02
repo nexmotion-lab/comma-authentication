@@ -61,7 +61,7 @@ public class AccountController {
     }
 
     @PostMapping("/info")
-    public ResponseEntity<Void> updateAccountInfo(@RequestParam Gender gender,
+    public ResponseEntity<Void> updateAccountInfo(@RequestParam(required = false) Gender gender,
                                                   @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate birthdate,
                                                   @RequestParam @Size(max = 12, message = "닉네임은 최대 12글자 입니다.") String nickname,
                                                   HttpServletRequest request) {
