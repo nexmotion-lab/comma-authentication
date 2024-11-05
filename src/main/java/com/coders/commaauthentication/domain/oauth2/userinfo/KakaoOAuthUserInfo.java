@@ -36,44 +36,11 @@ public class KakaoOAuthUserInfo extends OAuth2UserInfo{
 
     @Override
     public LocalDate getBirthDate() {
-        Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
-
-        if (account == null) {
-            return null;
-        }
-
-        String birthyear = (String) account.get("birthyear");
-        String birthday = (String) account.get("birthday");
-
-        if (birthyear == null || birthday == null) {
-            return null;
-        }
-
-        return convertToLocalDate(birthyear, birthday);
-    }
-
-    public LocalDate convertToLocalDate(String year, String monthday) {
-        String birthdate = year + monthday;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        return LocalDate.parse(birthdate, formatter);
+        return null;
     }
 
     @Override
     public Gender getGender() {
-        Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
-
-        if (account == null) {
-            return null;
-        }
-
-        String gender = (String) account.get("gender");
-
-        if (gender.equals("female")) {
-            return Gender.WOMAN;
-        } else if (gender.equals("male")) {
-            return Gender.MAN;
-        }
-
         return null;
     }
 
