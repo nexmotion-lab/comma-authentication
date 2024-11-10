@@ -9,6 +9,11 @@ server:
     connection-timeout: 2s
     keep-alive-timeout: 2s
 
+apple:
+  key-id: ${APPLE_KEY_ID:ZSK96GC9H3}
+  team-id: ${APPLE_TEAM_ID:NL527ZD88F}
+  private-key-path: classpath:/static/AuthKey_ZSK96GC9H3.p8
+
 spring:
   application:
     name: authentication
@@ -16,30 +21,46 @@ spring:
     oauth2:
       client:
         registration:
+          apple:
+            client-id: comma.coders.com
+            client-authentication-method: client_secret_post
+            authorization-grant-type: authorization_code
+            redirect-uri: https://www.comma-coders.com:8998/login/oauth2/code/apple
+            scope:
+              - openid
+              - email
+            client-name: Apple
+
           google:
-            client-id: 659320077987-m8nsjkbks7fq3eb567677k7kjiadmd2c.apps.googleusercontent.com
-            client-secret: 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
-            redirectUri: http://localhost:9001/login/oauth2/code/google
+            client-id: ${GOOGLE_CLIENT_ID:659320077987-m8nsjkbks7fq3eb567677k7kjiadmd2c.apps.googleusercontent.com}
+            client-secret: ${GOOGLE_CLIENT_SECRET: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}
+            redirectUri: http://www.comma-coders.com:8998/login/oauth2/code/google
             scope: profile, email
 
           naver:
-            client-id: t1WG_3zkBREXTv4KBkR8
-            client-secret: xhCWrTXIS8
-            redirect-uri: http://localhost:9001/login/oauth2/code/naver
+            client-id: ${NAVER_CLIENT_ID:t1WG_3zkBREXTv4KBkR8}
+            client-secret: ${NAVER_SECRET:xhCWrTXIS8}
+            redirect-uri: https://www.comma-coders.com:8998/login/oauth2/code/naver
             authorization-grant-type: authorization_code
             scope: name, email, gender, birthday, birthyear
             client-name: Naver
 
           kakao:
-            client-id: 4e11037af33f52477c955f6b6a4e5524
-            client-secret: ojFsaOVsuzG38DVKI2VtG6DWdmFjIvgh
-            redirect-uri: http://localhost:9001/login/oauth2/code/kakao
+            client-id: ${KAKAO_CLIENT_ID:6e00d5ccf1eaf74ba9ff145b073e9bb2}
+            client-secret: ${KAKAO_SECRET:Kl7k8Fhq1d1chsgK8Dj38g7iEu8CNi7T}
+            redirect-uri: https://www.comma-coders.com:8998/login/oauth2/code/kakao
             client-authentication-method: client_secret_post
             authorization-grant-type: authorization_code
-            scope: profile_nickname, birthday, gender, account_email
+            scope: profile_nickname, account_email
             client-name: Kakao
 
         provider:
+          apple:
+            authorizationUri: https://appleid.apple.com/auth/authorize?response_mode=form_post
+            tokenUri: https://appleid.apple.com/auth/token
+            jwkSetUri: https://appleid.apple.com/auth/keys
+            user-name-attribute: sub
+
           naver:
             authorization-uri: https://nid.naver.com/oauth2.0/authorize
             token-uri: https://nid.naver.com/oauth2.0/token
@@ -55,13 +76,13 @@ spring:
     timeout-per-shutdown-phase: 15s
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
   datasource:
-    username: root
-    password: temaris780525
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASSWORD:changeit1}
     url: jdbc:mysql://localhost:3306/comma_account?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
@@ -70,6 +91,13 @@ spring:
       idle-timeout: 60000
       max-lifetime: 1800000
       connection-timeout: 30000
+  flyway:
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    url: ${spring.datasource.url}
+    baselineOnMigrate: true
+    validateOnMigrate: false
+    outOfOrder: true
 
 management:
   endpoints:
@@ -93,8 +121,16 @@ management:
     tags:
       application: ${spring.application.name}
 
-
-
 logging:
   pattern:
     level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
+
+jwt:
+  secretKey: ${JWT_SECRET_KEY}
+  access:
+    expiration: 3600000
+    header: Authorization
+  refresh:
+    expiration: 1209600000
+    header: Authorization-refresh
+

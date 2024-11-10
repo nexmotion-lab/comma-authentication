@@ -28,7 +28,6 @@ public class CustomOidcUserService extends OidcUserService {
 
     @Override
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
-        log.info("OIDC 로그인 요청 진입");
         OidcUser oidcUser = super.loadUser(userRequest);
 
         SocialType socialType = getSocialType(userRequest.getClientRegistration().getRegistrationId());

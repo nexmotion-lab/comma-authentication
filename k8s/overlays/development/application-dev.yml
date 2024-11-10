@@ -8,3 +8,5 @@ security:
           redirectUri: http://localhost:9000/login/oauth2/code/kakao
         naver:
           redirectUri: http://localhost:9000/login/oauth2/code/naver
+        apple:
+          redirectUri: http://localhost:9000/login/oauth2/code/apple

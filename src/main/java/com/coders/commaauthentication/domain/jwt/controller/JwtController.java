@@ -27,8 +27,6 @@ public class JwtController {
     private final JwtService jwtService;
     private final AccountRepository accountRepository;
 
-
-
     @PostMapping("/createRefreshToken/{email}")
     public Map<String, String> createRefreshToken(@PathVariable String email) {
         Map<String, String> jwtToken = new HashMap<>();

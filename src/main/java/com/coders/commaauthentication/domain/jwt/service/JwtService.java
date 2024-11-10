@@ -68,42 +68,6 @@ public class JwtService {
                 .sign(Algorithm.HMAC512(secretKey));
     }
 
-    /**
-     * AccessToken 헤더에 실어서 보내기
-     */
-    public void sendAccessToken(HttpServletResponse response, String accessToken) {
-        Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
-        accessTokenCookie.setMaxAge(accessTokenExpirationPeriod.intValue());
-        accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setPath("/");
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.addCookie(accessTokenCookie);
-    }
-
-
-    public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
-        String authorizationHeader = String.format("Bearer %s, accessToken=%s, refreshToken=%s", accessToken, accessToken, refreshToken);
-
-        response.addHeader("Authorization", authorizationHeader);
-
-        log.info("재발급된 Access Token : {}", accessToken);
-        log.info("재발급된 Refresh Token : {}", refreshToken);
-    }
-
-
-
-
-    public Optional<String> extractRefreshToken(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            return Arrays.stream(cookies)
-                    .filter(cookie -> "refreshToken".equals(cookie.getName()))
-                    .findFirst()
-                    .map(Cookie::getValue);
-        }
-        return Optional.empty();
-    }
-
 
     public void updateRefreshToken(String email, String refreshToken) {
         Account account = accountRepository.findByEmail(email)

@@ -24,7 +24,6 @@ public class AppleOAuth2AuthorizationCodeGrantRequestEntityConverter extends OAu
 
     @Override
     protected MultiValueMap<String, String> createParameters(OAuth2AuthorizationCodeGrantRequest authorizationCodeGrantRequest) {
-        log.info("컨버팅 시작");
         var clientRegistrationId = authorizationCodeGrantRequest.getClientRegistration().getRegistrationId();
         if (APPLE_REGISTRATION_ID.equalsIgnoreCase(clientRegistrationId)) {
             var encryptedPrivateKey = appleClientSecretGenerator.createClientSecret();

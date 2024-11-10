@@ -13,6 +13,10 @@ spec:
     metadata:
       labels:
         app: auth-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /actuator/prometheus
+        prometheus.io/port: "9001"
     spec:
       containers:
         - name: authentication
@@ -27,11 +31,31 @@ spec:
           env:
             - name: SPRING_CONFIG_ADDITIONAL_LOCATION
               value: "file:/config/"
+            - name: JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: secretKey
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_PASSWORD
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_ROOT_PASSWORD
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
               port: 9001
-            initialDelaySeconds: 30
+            initialDelaySeconds: 50
             periodSeconds: 10
             timeoutSeconds: 3
             failureThreshold: 3
@@ -39,9 +63,8 @@ spec:
             httpGet:
               path: /actuator/health/readiness
               port: 9001
-            initialDelaySeconds: 20
+            initialDelaySeconds: 30
             periodSeconds: 10
-
           volumeMounts:
             - name: auth-config-volume
               mountPath: /config
@@ -49,3 +72,4 @@ spec:
         - name: auth-config-volume
           configMap:
             name: auth-config
+
