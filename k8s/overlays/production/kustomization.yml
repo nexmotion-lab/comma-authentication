@@ -3,7 +3,6 @@ kind: Kustomization
 
 resources:
   - ../../base
-  - cluster-issuer.yaml
 
 patches:
   - path: patch-env.yaml
