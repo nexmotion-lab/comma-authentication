@@ -57,7 +57,7 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .requestMatchers("/jwt/**", "/account/**").permitAll()
+                .requestMatchers("/jwt/**", "/account/**", "/actuator/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login()

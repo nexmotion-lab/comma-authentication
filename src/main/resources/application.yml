@@ -10,8 +10,8 @@ server:
     keep-alive-timeout: 2s
 
 apple:
-  key-id: ${APPLE_KEY_ID:ZSK96GC9H3}
-  team-id: ${APPLE_TEAM_ID:NL527ZD88F}
+  key-id: ${APPLE_KEY_ID}
+  team-id: ${APPLE_TEAM_ID}
   private-key-path: classpath:/static/AuthKey_ZSK96GC9H3.p8
 
 spring:
@@ -32,13 +32,13 @@ spring:
             client-name: Apple
 
           google:
-            client-id: ${GOOGLE_CLIENT_ID:659320077987-m8nsjkbks7fq3eb567677k7kjiadmd2c.apps.googleusercontent.com}
-            client-secret: ${GOOGLE_CLIENT_SECRET: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}
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
             redirectUri: http://www.comma-coders.com:8998/login/oauth2/code/google
             scope: profile, email
 
           naver:
-            client-id: ${NAVER_CLIENT_ID:t1WG_3zkBREXTv4KBkR8}
+            client-id: ${NAVER_CLIENT_ID}
             client-secret: ${NAVER_SECRET:xhCWrTXIS8}
             redirect-uri: https://www.comma-coders.com:8998/login/oauth2/code/naver
             authorization-grant-type: authorization_code
